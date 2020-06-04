@@ -48,6 +48,43 @@ bool is_possible(vector<int> in_arr, vector<int> out_arr) {
 	}
 }
 
+//同样的思路其实也可以只用O(1)空间来做
+bool less_space(vector<int> pushV, vector<int> popV) {
+	//vector<int>::iterator pop_i = popV.begin();
+	/*
+	for (vector<int>::iterator top = pushV.begin() - 1; top != pushV.end();) {
+		++top;
+		if (*top == *popV.begin()) {
+			top = pushV.erase(top);
+			top -= 1;
+			popV.erase(popV.begin());
+		}
+			
+	}
+	return popV.empty();
+	*/
+	//在使用修改数组时用迭代器会出现意外的麻烦。
+	//正确的做法是ite = v.erase(v)，会自动指向下一个有效的位置。
+	//我的上面的代码在release版本下可以正常工作，但是debug模式认为我的迭代器在模拟栈开始时指向了begin()-1。
+	//总之如果涉及遍历，又需要修改数组，还是用下标吧。
+	for (int i = 0; i < pushV.size();)
+	{
+		if (pushV[i] == popV[0])
+		{
+			pushV.erase(pushV.begin() + i);
+			popV.erase(popV.begin());
+			i--;                                // 模拟出栈
+		}
+		else
+		{
+			i++;                                //  模拟入栈
+		}
+	}
+
+	return pushV.empty();
+}
+
+
 int main() {
 	vector<int> in = { 1,2,3,4,5 };
 	vector<int> out = { 4,5,3,2,1 };
@@ -55,5 +92,8 @@ int main() {
 	is_possible(in, out);
 		
 	is_possible(in, wrong);
+
+	if (less_space(in, out)) cout << "Yes\n";
+	if (!less_space(in, wrong)) cout << "No\n";
 	return 0;
 }
