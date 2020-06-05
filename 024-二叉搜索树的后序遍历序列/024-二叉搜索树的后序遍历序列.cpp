@@ -31,7 +31,7 @@ bool is_bin_search_tree(vector<int> & given_array, int l, int r) {
 	else return is_bin_search_tree(given_array, l, i - 1) && is_bin_search_tree(given_array, j, r - 1);
 }
 //https://github.com/mingyunyuansu/CodingInterviews/tree/master/024-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97
-//这一题还有另外两种方法，但是我感觉有那么一点杂记的意思。
+//这一题还有另外两种方法，但是我感觉有那么一点杂技的意思。
 //而且我现在突然感觉时间有点紧了，这一题递归应该是最明晰的解，就到此为止吧。
 
 int main() {
