@@ -11,6 +11,8 @@
 */
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <map>
 using namespace std;
 
 //直觉上思路很简单，先排序，然后位于数组中间的数一定是答案
@@ -74,14 +76,65 @@ void recur(vector<int> & arr, int l, int r, int half_size) {
 	}
 }
 
+//上一种方法其实可以修改第四个形参，使得可以用作找第K大的数
+//但是还有一种完全利用“比一半还多”的写法，叫做攻守阵地。
+//有一点类似动态规划。以一个数为起点，count = 1，如果碰到不等的数count--，相同则count++。
+//count归零则从下一个数开始重启。目标数因为个数过半，所以一定会以count>0的形式留下来。
+//时间复杂度即O(N)
+int fully_utilised(vector<int> arr) {
+	if (arr.size() <= 1) return arr[0];
+	int count = 0, ans = arr[0];
+	for (int x : arr) {
+		if (count == 0) ans = x;
+		if (x == ans) {
+			count++;
+		}
+		else {
+			count--;
+		}
+	}
+	return ans;
+}
 
+//答案也介绍了使用STL的方法
+int with_count(vector<int> arr) {
+	for (int i = 0; i < arr.size(); ++i) {
+		if (count(arr.begin(), arr.end(), arr[i]) > arr.size() / 2)
+			return arr[i];
+	}
+	return -1;
+}
+
+//也可以复习下使用map
+int with_map(vector <int> arr) {
+	map<int, int> cnt_map;
+	for (auto x : arr) {
+		cnt_map[x]++;
+	}
+	for (map<int, int>::iterator it = cnt_map.begin(); it != cnt_map.end(); ++it) {
+		if (it->second > arr.size() / 2)
+			return it->first;
+	}
+	return -1;
+}
 
 int main() {
 	vector<int> v{ 5, 5, 2, 2, 3, 3, 5, 5, 5 };
 	intuitive(v);
 	cout << endl;
+
 	v = { 5, 5, 2, 2, 2};
 	recur(v, 0, v.size()-1, v.size()/2);
+	cout << endl;
+
+	v = { 5, 5, 2, 2, 3, 3, 5, 5, 5, 1,1,1,1,1,1,1,1,1,1,1,1,1, 5,5 };
+	cout << fully_utilised(v) << endl;
+
+	v = { 5, 5, 2, 2, 3, 3, 5, 5, 5, 1,1,1,1,1,1,1,1,1,1,1,1,1, 5,5 };
+	cout << with_count(v) << endl;
+
+	v = { 5, 5, 2, 2, 3, 3, 5, 5, 5, 1,1,1,1,1,1,1,1,1,1,1,1,1, 5,5 };
+	cout << with_map(v);
 	cout << endl;
 	return 0;
 }
