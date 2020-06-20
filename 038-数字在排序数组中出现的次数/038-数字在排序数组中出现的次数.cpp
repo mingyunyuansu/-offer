@@ -6,6 +6,7 @@
 */
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 int brutal_force(vector<int>& v, int n) {
@@ -35,7 +36,7 @@ int binary_search(vector<int>& v, int n) {
 		mid = (left + right) / 2;
 	}
 	int count = 0;
-	if (v[mid] = n) {
+	if (v[mid] == n) {
 		int t = mid;
 		while (t >= 0 && v[t] == n) {
 			count++;
@@ -96,6 +97,26 @@ int approved_bi_search(vector<int>& v, int n) {
 	return get_last_one(v, n, 0, v.size() - 1) - get_first_one(v, n, 0, v.size() - 1) + 1;
 }
 
+/*
+C++真是什么鬼方法都有哦
+##STL的
+
+　ForwardIter lower_bound(ForwardIter first, ForwardIter last,const _Tp& val)
+算法返回一个非递减序列[first, last)中的第一个大于等于值val的位置。
+
+ForwardIter upper_bound(ForwardIter first, ForwardIter last, const _Tp& val)
+算法返回一个非递减序列[first, last)中第一个大于val的位置。
+*/
+
+
+int GetNumberOfK(vector<int> data ,int k)
+{
+    //在<algorithm>中，
+    //返回的是迭代器
+    auto upper = upper_bound(data.begin(),data.end(),k);
+    auto low = lower_bound(data.begin(),data.end(),k);
+    return upper - low;
+}
 
 int main() {
 	int arr[] = { 1, 2, 3, 3, 3, 3,3, 4, 5 };
@@ -103,5 +124,6 @@ int main() {
 	cout << brutal_force(v, 3) << endl;
 	cout << binary_search(v, 3) << endl;
 	cout << approved_bi_search(v, 3) << endl;
+    cout << GetNumberOfK(v, 3) << endl;
 	return 0;
 }
