@@ -31,7 +31,7 @@ bool is_sub_tree(node* root1, node* root2) {
 	return is_sub_tree(root1->left, root2->left) && is_sub_tree(root1->right, root2->right);
 }
 
-bool post_search(node* root, node* root2) {
+bool pre_search(node* root, node* root2) {
 	if (!root2 || !root) return false;
 	if (root2->val == root->val) {
 		//find the possible starting point
@@ -39,7 +39,7 @@ bool post_search(node* root, node* root2) {
 			return true;
 		}
 	}
-	return post_search(root->left, root2) || post_search(root->right, root2);
+	return pre_search(root->left, root2) || pre_search(root->right, root2);
 }
 
 
