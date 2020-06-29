@@ -2,7 +2,9 @@
 #include <vector>
 #include <cmath>
 using namespace std;
-
+//这种写法是贪心，我又一次再贪心上吃亏了
+//考虑(1,2,3)和(3,1,1)，可用时间是5分钟这种情况，如果一直采用贪心，那么就会只考虑A数组，这里应该用别人提供的考虑全局，prefix_sum，遍历A然后检索B来“凑”最大值的方法
+//再次强调，贪心的使用只能在选择与顺序无关的情况下，或者已经被整顿（比如排序）。这里是有关的，因为不拿掉前一个数就无法考虑后面的数，实际上已经对选择产生了影响。
 bool isPrime(long long x) {
     if (x == 2) return true;
     long long i = 2;
