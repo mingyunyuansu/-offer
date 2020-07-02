@@ -14,6 +14,8 @@ false
 */
 #include <iostream>
 #include <string>
+#include <cstring>
+#include <vector>
 using namespace std;
 
 //试了试，没写出来，虽然有思路
@@ -46,27 +48,50 @@ bool divide_recur(string& s, string& p) {
 */
 bool match(char* str, char* pattern)
 {
-    if (*str == 0 && *pattern == 0) return true;
-    if (*str && *pattern == 0) return false;
-    //首先分下一个是否是*
-    if (pattern[1] == '*') {
-        while (*str && (*str == *pattern || *pattern == '.')) {
-            //*匹配一个或多个
-            if (match(str++, pattern+2)) return true;
-        }
-        //*匹配了0个
-        return match(str, pattern+2);
-    }
-    else {
-        if (*str == *pattern || (*pattern == '.' && *str)) {
-            //注意这里 . 必须和非空字符匹配
-            return match(str+1, pattern+1);
-        }
-        else return false;
-    }
+	if (*str == 0 && *pattern == 0) return true;
+	if (*str && *pattern == 0) return false;
+	//首先分下一个是否是*
+	if (pattern[1] == '*') {
+		while (*str && (*str == *pattern || *pattern == '.')) {
+			//*匹配一个或多个
+			if (match(str++, pattern + 2)) return true;
+		}
+		//*匹配了0个
+		return match(str, pattern + 2);
+	}
+	else {
+		if (*str == *pattern || (*pattern == '.' && *str)) {
+			//注意这里 . 必须和非空字符匹配
+			return match(str + 1, pattern + 1);
+		}
+		else return false;
+	}
 }
 
+//DP
+//dp[i][j]表示前i个和前k个s和p能否匹配
+bool dynamic_programming(char* s, char* p) {
+	int ls = strlen(s), lp = strlen(p);
+	vector<vector<bool>> dp(ls+1, vector<bool>(lp+1));
+	//因为需要一个状态来表示“不匹配”这个状态，所以[0][0]被占
+	dp[0][0] = true;
+	for (int i = 0; i <= ls; ++i) {
+		for (int j = 0; j <= lp; ++j) {
+			if (j == 0) dp[i][j] = (i == 0);
+			if (p[j - 1] != '*') {
+				if (s[i-1] == p[j-1] || p[j-1] == '.') {
+					dp[i][j] = dp[i - 1][j - 1];
+				}
+			}
+			else {
+				if (j >= 2) {
+					dp[i][j] = dp[i][j - 2];
+				}
 
+			}
+		}
+	}
+}
 
 int main() {
 	char a[] = "aaa", b[] = "aaa*a";
