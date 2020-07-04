@@ -77,40 +77,30 @@ bool match(char *str, char *pattern)
 }
 
 //DP
-//dp[i][j]表示前i个和前k个s和p能否匹配
+//dp[i][j]表示前i个和前k个s(s[0...i-1])和p(p[0...j-1])能否匹配
 bool dynamic_programming(char *s, char *p)
 {
-	int ls = strlen(s), lp = strlen(p);
-	vector<vector<bool>> dp(ls + 1, vector<bool>(lp + 1));
-	//因为需要一个状态来表示“不匹配”这个状态，所以[0][0]被占
-	dp[0][0] = true;
-	for (int i = 0; i <= ls; ++i)
-	{
-		for (int j = 0; j <= lp; ++j)
-		{
-			if (j == 0)
-				dp[i][j] = (i == 0);
-			if (p[j - 1] != '*')
-			{
-				if (s[i - 1] == p[j - 1] || p[j - 1] == '.')
-				{
+	int s_len = strlen(s), p_len = strlen(p);
+	vector<vector<bool> > dp(s_len+1, vector<bool>(p_len+1, false));
+	for (int i = 0; i <= s_len; ++i) {
+		for (int j = 0; j <= p_len; ++j) {
+			if (j == 0) dp[i][j] = (i == 0);
+			else if (p[j - 1] != '*') {
+				if (p[j- 1] == '.' || p[j - 1] == s[i - 1]) {
 					dp[i][j] = dp[i - 1][j - 1];
 				}
 			}
-			else
-			{
-				if (j >= 2)
-				{
-					dp[i][j] = dp[i][j] || dp[i][j - 2];
+			else {
+				if (j >= 2) {
+					dp[i][j] = (dp[i][j - 2] || dp[i][j]);
 				}
-				if (i >= 1 && j >= 2 && (s[i - 1] == p[j - 2] || p[j - 2] == '.'))
-				{
-					dp[i][j] = dp[i][j] || dp[i - 1][j];
+				if (j >= 2 && (s[i - 1] == p[j - 2] || p[j - 2] == '.')) {
+					dp[i][j] = (dp[i][j] || dp[i - 1][j]);
 				}
 			}
 		}
 	}
-	return dp[ls][lp];
+	return dp[s_len][p_len];
 }
 
 int main()
