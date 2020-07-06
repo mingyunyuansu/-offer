@@ -30,4 +30,39 @@ int main() {
 */
 //仔细看了一下题目才发现是要从字符流中判断。。。
 //然后跑去看了下题解，还蛮有意思，同时用到map和queue。
+#include <iostream>
+#include <string>
+#include <queue>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+	public:
+	void Insert(char ch) {
+		q.push(ch);
+		if (m.find(ch) == m.end()) {
+			m[ch] = true;
+		}
+		else m[ch] = false;
+	}
+	char FirstAppearingOnce() {
+		while(!q.empty() && m.find(q.front())->second == false) {
+			q.pop();
+		}
+		return q.empty()? '#':q.front();
+	}
+	private:
+	unordered_map<char, bool> m;
+	queue<char> q;
+};
+
+int main() {
+	Solution solu;
+	string test = "google";
+	for (char c: test) {
+		solu.Insert(c);
+		cout << solu.FirstAppearingOnce() <<"\n";
+	}
+	return 0;
+}
 
