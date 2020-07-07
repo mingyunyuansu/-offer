@@ -46,8 +46,27 @@ char* serialise(TreeNode* root) {
     return s;
 }
 
+TreeNode* deserialise_recur(char* s, int& pos) {
+    if (s[pos] != '\0' && s[pos] == '#') {
+        pos++;
+        return NULL;
+    }
+    int i = pos;
+    while (s[i] != '!') {
+        ++i;
+    }
+    string tmp(s+pos, s+i);
+    pos = i + 1;
+    i = stoi(tmp);
+    TreeNode* root = new TreeNode(i);
+    root->left = deserialise_recur(s, pos);
+    root->right = deserialise_recur(s, pos);
+    return root;
+}
+
 TreeNode* deserialise(char* s) {
-    
+    int n = 0;
+    return deserialise_recur(s, n);
 }
 
 int main() {
@@ -62,5 +81,8 @@ int main() {
     int len = strlen(s);
     string ns(s, s + len);
     cout << ns << endl;
+
+    TreeNode * proot = deserialise(s);
+    cout << proot->left->left->val << endl;
     return 0;
 }
