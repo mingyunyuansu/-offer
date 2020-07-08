@@ -7,6 +7,8 @@
 总之这篇是堆的练习和模板。
 网上很多资料说得不清楚，最后还是看的英文资料
 https://www.hackerearth.com/zh/practice/data-structures/trees/heapspriority-queues/tutorial/
+
+关于时间复杂的详细证明可以看这个http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf
 */
 #include <iostream>
 #include <vector>
