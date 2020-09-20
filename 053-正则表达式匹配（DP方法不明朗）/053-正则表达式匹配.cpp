@@ -46,6 +46,7 @@ bool divide_recur(string& s, string& p) {
 	}
 }
 */
+/* 废弃
 bool match(char *str, char *pattern)
 {
 	if (*str == 0 && *pattern == 0)
@@ -75,7 +76,21 @@ bool match(char *str, char *pattern)
 			return false;
 	}
 }
+*/
 
+    bool match(string &s, string &p, int i, int j) {
+        if (j == p.size()) {
+            return i == s.size();
+        }
+        if (p[j + 1] == '*') {
+            if (s[i] == p[j] || (p[j] == '.' && s[i])) {
+                return match(s, p, i + 1, j + 2) || match(s, p, i, j + 2) || match(s, p, i + 1, j);
+            }
+            else return match(s, p, i, j + 2);
+        }
+        else if (s[i] == p[j] || (p[j] == '.' && s[i])) return match(s, p, i + 1, j + 1);
+        return false;
+    }
 //DP
 //dp[i][j]表示前i个和前k个s(s[0...i-1])和p(p[0...j-1])能否匹配
 bool dynamic_programming(char *s, char *p)
@@ -106,7 +121,8 @@ bool dynamic_programming(char *s, char *p)
 int main()
 {
 	char a[] = "aaa", b[] = "aaa*a";
-	if (match(a, b))
+	string s = "aaa", p = "aaa*a";
+	if (match(s, p, 0, 0))
 		cout << "Yes\n";
 	if (dynamic_programming(a, b)) {
 		cout << "Yes\n";
